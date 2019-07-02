@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./src/styles.css"],"names":[],"mappings":";;AAEA;AACA;AACA;AACA;;AAEA;AACA;AACA","file":"main.css","sourcesContent":["\r\n\r\nli {\r\n    flex: 0 0 30%;\r\n    margin-top: auto;\r\n}\r\n\r\nh4, #repo-list {\r\n    text-align: center;\r\n}\r\n\r\n\r\n\r\n\r\n\r\n"],"sourceRoot":""}
