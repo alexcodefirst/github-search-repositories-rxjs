@@ -7,7 +7,7 @@ import { ISearchRepositoriesResult } from './models/ISearchRepositoriesResult';
 import { IRepository } from './models/IRepository';
 
 const inputStream$: Observable<IRepository[]> =
-    fromEvent(document.getElementById('tokenInput') as HTMLInputElement, 'keyup').pipe(
+    fromEvent(document.getElementById('token') as HTMLInputElement, 'keyup').pipe(
         distinct(),
         debounceTime(500),
         switchMap((event: Event): Observable<ISearchRepositoriesResult> => {
@@ -22,9 +22,9 @@ const inputStream$: Observable<IRepository[]> =
 
             return ajax.getJSON(request);
         }),
-        catchError((error: string): Observable<ISearchRepositoriesResult> => {
-            render(`<h1>Smth went wrong: ${error}</h1>`);
-            return of({ items: [] } as ISearchRepositoriesResult);
+        catchError((error: Error, currentObsevable: Observable<ISearchRepositoriesResult> ) => {
+            render(`<h1>Smth went wrong: ${error.message}</h1>`);
+            return currentObsevable;
         }),
         map((response: ISearchRepositoriesResult): IRepository[] => {
             return response.items;
