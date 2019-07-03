@@ -99,6 +99,7 @@ const operators_1 = __webpack_require__(103);
 const jquery_1 = __importDefault(__webpack_require__(201));
 __webpack_require__(202);
 const ajax_1 = __webpack_require__(203);
+const HtmlHelper_1 = __webpack_require__(208);
 const inputStream$ = rxjs_1.fromEvent(document.getElementById('token'), 'keyup').pipe(operators_1.distinct(), operators_1.debounceTime(500), operators_1.switchMap((event) => {
     const baseUrl = 'https://api.github.com/search/repositories?';
     const params = {
@@ -109,7 +110,7 @@ const inputStream$ = rxjs_1.fromEvent(document.getElementById('token'), 'keyup')
     const request = baseUrl.concat(jquery_1.default.param(params));
     return ajax_1.ajax.getJSON(request);
 }), operators_1.catchError((error, currentObsevable) => {
-    render(`<h1>Smth went wrong: ${error.message}</h1>`);
+    HtmlHelper_1.render(`<h1>Smth went wrong: ${error.message}</h1>`);
     return currentObsevable;
 }), operators_1.map((response) => {
     return response.items;
@@ -126,13 +127,12 @@ inputStream$.subscribe((repositories) => {
                         <i>${repository.description}</i>
                     </a>`;
         });
-        render(content);
+        HtmlHelper_1.render(content);
+    }
+    else {
+        HtmlHelper_1.render(`<h1>Ooops.. Repositories weren't found</h1>`);
     }
 });
-const render = (content) => {
-    jquery_1.default('.container').empty();
-    jquery_1.default('.container').append(content);
-};
 
 
 /***/ }),
@@ -22884,6 +22884,23 @@ try {
 // easier to handle this case. if(!global) { ...}
 
 module.exports = g;
+
+
+/***/ }),
+/* 208 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const jquery_1 = __importDefault(__webpack_require__(201));
+exports.render = (content) => {
+    jquery_1.default('.container').empty();
+    jquery_1.default('.container').append(content);
+};
 
 
 /***/ })

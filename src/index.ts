@@ -5,6 +5,7 @@ import './styles.css';
 import { ajax } from 'rxjs/ajax';
 import { ISearchRepositoriesResult } from './models/ISearchRepositoriesResult';
 import { IRepository } from './models/IRepository';
+import { render } from './helpers/HtmlHelper';
 
 const inputStream$: Observable<IRepository[]> =
     fromEvent(document.getElementById('token') as HTMLInputElement, 'keyup').pipe(
@@ -22,7 +23,7 @@ const inputStream$: Observable<IRepository[]> =
 
             return ajax.getJSON(request);
         }),
-        catchError((error: Error, currentObsevable: Observable<ISearchRepositoriesResult> ) => {
+        catchError((error: Error, currentObsevable: Observable<ISearchRepositoriesResult>) => {
             render(`<h1>Smth went wrong: ${error.message}</h1>`);
             return currentObsevable;
         }),
@@ -31,27 +32,24 @@ const inputStream$: Observable<IRepository[]> =
         })
     );
 
-    inputStream$.subscribe((repositories: IRepository[]): void => {
+inputStream$.subscribe((repositories: IRepository[]): void => {
 
-        if (repositories.length) {
+    if (repositories.length) {
 
-            let content: string = '';
+        let content: string = '';
 
-            repositories.forEach((repository: IRepository) => {
-                content +=
-                    `<a class="item" href="${repository.html_url}" target="_blank">
+        repositories.forEach((repository: IRepository) => {
+            content +=
+                `<a class="item" href="${repository.html_url}" target="_blank">
                         <p>${repository.full_name}</p>
                         <img src="${repository.owner.avatar_url}">
                         <p>${repository.language}</p>
                         <i>${repository.description}</i>
                     </a>`;
-            });
+        });
 
-            render(content);
-        }
-    });
-
-    const render = (content: string): void => {
-        $('.container').empty();
-        $('.container').append(content);
-    };
+        render(content);
+    } else {
+        render(`<h1>Ooops.. Repositories weren't found</h1>`);
+    }
+});
