@@ -1,5 +1,5 @@
 import { fromEvent, Observable, of } from 'rxjs';
-import { debounceTime, distinct, map, mergeMap, catchError, switchMap, onErrorResumeNext } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import $ from 'jquery';
 import './styles.css';
 import { ajax } from 'rxjs/ajax';
@@ -9,8 +9,8 @@ import { render } from './helpers/HtmlHelper';
 
 const inputStream$: Observable<IRepository[]> =
     fromEvent(document.getElementById('token') as HTMLInputElement, 'keyup').pipe(
-        distinct(),
-        debounceTime(500),
+        debounceTime(300),
+        distinctUntilChanged(),
         switchMap((event: Event): Observable<ISearchRepositoriesResult> => {
 
             const baseUrl: string = 'https://api.github.com/search/repositories?';
